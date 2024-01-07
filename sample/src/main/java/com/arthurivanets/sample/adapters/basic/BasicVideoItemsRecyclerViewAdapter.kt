@@ -52,7 +52,7 @@ class BasicVideoItemsRecyclerViewAdapter(
     }
 
 
-    fun getItem(position : Int) : Video? {
+    private fun getItem(position : Int) : Video? {
         return (if((position >= 0) && (position < itemCount)) items[position] else null)
     }
 
@@ -60,6 +60,7 @@ class BasicVideoItemsRecyclerViewAdapter(
     override fun getItemCount() : Int {
         return items.size
     }
+
 
 
 }

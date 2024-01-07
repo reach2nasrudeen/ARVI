@@ -20,6 +20,7 @@ import android.content.Context
 import android.os.Bundle
 import androidx.core.os.bundleOf
 import com.arthurivanets.arvi.Config
+import com.arthurivanets.arvi.ktx.defaultExoCache
 import com.arthurivanets.arvi.util.misc.ExoPlayerUtils
 import com.arthurivanets.arvi.utils.recyclerview.PreCacheLinearLayoutManager
 import com.arthurivanets.arvi.widget.PlayableItemsContainer
@@ -83,11 +84,13 @@ class AdapsterVideosFragment : BaseFragment(), CanManagePlayback, HasTitle {
                     .toMutableList(),
                 resources = VideoItemResources(
                     arviConfig = Config.Builder()
-                        .cache(ExoPlayerUtils.getCache(context!!))
+                        .cache(requireContext().defaultExoCache())
                         .build()
                 )
             )
         }
+
+        recyclerView
     }
 
 

@@ -16,6 +16,7 @@
 
 package com.arthurivanets.sample.adapters.basic
 
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -37,6 +38,7 @@ class BasicVideoItemViewHolder(
     val arviConfig : Config
 ) : PlayableItemViewHolder(parent, itemView) {
 
+    private val tag = this::class.java.simpleName
 
     val titleTv = itemView.findViewById<TextView>(R.id.titleTv)
     val progressBar = itemView.findViewById<ProgressBar>(R.id.progressBar)
@@ -92,17 +94,31 @@ class BasicVideoItemViewHolder(
             PlaybackState.PAUSED -> onPausedState()
             PlaybackState.STOPPED -> onStoppedState()
             PlaybackState.ERROR -> onErrorState()
+            PlaybackState.STARTED -> onStarted()
+            PlaybackState.RESTARTED -> onRestarted()
         }
     }
 
+    private fun onRestarted() {
+        print("onRestarted")
+    }
+    private fun onStarted() {
+        print("onStarted")
+    }
+
+    private fun print(msg: String) {
+        Log.e("$tag----${video?.id}", "${video?.videoUrl}---->$msg")
+    }
 
     private fun onBufferingState() {
+        print("onBufferingState")
         progressBar.makeVisible()
         errorIconIv.makeGone()
     }
 
 
     private fun onReadyState() {
+        print("onReadyState")
         progressBar.makeGone()
         errorIconIv.makeGone()
 
@@ -111,16 +127,19 @@ class BasicVideoItemViewHolder(
 
 
     private fun onPausedState() {
+        print("onPausedState")
         progressBar.makeGone()
     }
 
 
     private fun onStoppedState() {
+        print("onStoppedState")
         progressBar.makeGone()
     }
 
 
     private fun onErrorState() {
+        print("onErrorState")
         progressBar.makeGone()
         errorIconIv.makeVisible()
     }

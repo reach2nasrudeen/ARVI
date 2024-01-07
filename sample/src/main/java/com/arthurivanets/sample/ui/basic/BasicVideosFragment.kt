@@ -19,7 +19,9 @@ package com.arthurivanets.sample.ui.basic
 import android.content.Context
 import android.os.Bundle
 import androidx.core.os.bundleOf
+import androidx.recyclerview.widget.PagerSnapHelper
 import com.arthurivanets.arvi.Config
+import com.arthurivanets.arvi.ktx.defaultExoCache
 import com.arthurivanets.arvi.util.misc.ExoPlayerUtils
 import com.arthurivanets.arvi.utils.recyclerview.PreCacheLinearLayoutManager
 import com.arthurivanets.arvi.widget.PlayableItemsContainer
@@ -66,19 +68,25 @@ class BasicVideosFragment : BaseFragment(), CanManagePlayback, HasTitle {
         with(recyclerView) {
             setPlaybackTriggeringStates(
                 PlayableItemsContainer.PlaybackTriggeringState.IDLING,
-                PlayableItemsContainer.PlaybackTriggeringState.DRAGGING
+                PlayableItemsContainer.PlaybackTriggeringState.DRAGGING,
+                PlayableItemsContainer.PlaybackTriggeringState.SETTLING
             )
 
+            onFlingListener = null
+
+            val pagerSnapHelper = PagerSnapHelper()
+            pagerSnapHelper.attachToRecyclerView(this)
+
             autoplayMode = this@BasicVideosFragment.autoplayMode
-            layoutManager = PreCacheLinearLayoutManager(context!!).also {
+            layoutManager = PreCacheLinearLayoutManager(requireContext()).also {
                 it.isItemPrefetchEnabled = true
-                it.initialPrefetchItemCount = 4
+                it.initialPrefetchItemCount = 10
             }
             adapter = BasicVideoItemsRecyclerViewAdapter(
-                context = context!!,
-                items = VideoProvider.getVideos(count = 100, mute = true).toMutableList(),
+                context = requireContext(),
+                items = VideoProvider.getVideos(count = 100, mute = false).toMutableList(),
                 arviConfig = Config.Builder()
-                    .cache(ExoPlayerUtils.getCache(context!!))
+//                    .cache(requireContext().defaultExoCache())
                     .build()
             )
         }
